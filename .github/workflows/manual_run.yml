@@ -20,7 +20,7 @@ jobs:
           
       - name: execute py script # run main.py
         env:
-          SUPER_SECRET: $SNOWFLAKE_PASSWORD
+          SNOW_PASS: $SNOWFLAKE_PASSWORD
         run: python main.py
           
       # - name: commit files

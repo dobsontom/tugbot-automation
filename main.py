@@ -62,7 +62,7 @@ with open("events.csv", "w", newline="", encoding="utf-8") as events_data:
 
 conn = snowflake.connector.connect(
     user="SVC_DS31",
-    password=os.environ["PATH"],
+    password=os.environ["SNOW_PASS"],
     account="ad21223.eu-west-1",
     warehouse="DATASCHOOL_WH",
     database="TIL_PORTFOLIO_PROJECTS",
