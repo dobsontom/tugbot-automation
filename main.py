@@ -1,6 +1,7 @@
 import requests
 import csv
 import snowflake.connector
+import os
 
 url = "https://usergroups.tableau.com/api/search/?result_types=upcoming_event&&country_code=Earth"
 
@@ -61,7 +62,7 @@ with open("events.csv", "w", newline="", encoding="utf-8") as events_data:
 
 conn = snowflake.connector.connect(
     user="SVC_DS31",
-    password="$SNOWFLAKE_PASSWORD",
+    password=os.environ["PATH"],
     account="ad21223.eu-west-1",
     warehouse="DATASCHOOL_WH",
     database="TIL_PORTFOLIO_PROJECTS",
