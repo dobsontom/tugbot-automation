@@ -46,5 +46,4 @@ env.bak/
 venv.bak/
 
 Jupyter/
-
-.github\workflows\manual_run.yml
+Manual/
