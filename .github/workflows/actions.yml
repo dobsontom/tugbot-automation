@@ -4,6 +4,7 @@ on:
   schedule:
     - cron: '*/50 * * * *'
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,11 +21,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
-      - name: Set Snowflake password as an environment variable
-        run: echo "SNOWFLAKE_PASSWORD=$SNOWFLAKE_PASSWORD" >> $GITHUB_ENV
           
       - name: execute py script # run main.py
+        env:
+          SNOW_PASS: ${{ secrets.SNOWFLAKE_PASSWORD }}
         run: python main.py
           
       # - name: commit files
