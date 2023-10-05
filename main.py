@@ -175,14 +175,15 @@ conn.cursor().execute(
                 (
                    SELECT
                       *,
-                      LEFT(CASE
-                         WHEN
-                            LEFT(time_difference, 1) = '+'
-                         THEN
-                            DATEADD( HOUR, - SUBSTR(time_difference, 3, 1), local_time )
-                         ELSE
-                            DATEADD( HOUR, SUBSTR(time_difference, 3, 1), local_time )
-                      END, 5)
+                      LEFT(
+                        CASE
+                           WHEN
+                              LEFT(time_difference, 1) = '+'
+                           THEN
+                              DATEADD( HOUR, - SUBSTR(time_difference, 3, 1), local_time )
+                           ELSE
+                              DATEADD( HOUR, SUBSTR(time_difference, 3, 1), local_time )
+                        END, 5)
                       AS gmt_time
                    FROM
                       main_data
