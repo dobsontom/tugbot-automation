@@ -10,53 +10,58 @@ response.raise_for_status()
 
 json_results = response.json()["results"]
 
+# Flattens chapter data and appends these fields to the primary fields.
 combined_data = []
-for entry in json_results:
-    main_data = {key: value for key, value in entry.items() if key != "chapter"}
+for event in json_results:
+    main_data = {key: value for key, value in event.items() if key != "chapter"}
 
-    chapter_data = {"chapter_" + key: value for key, value in entry["chapter"].items()}
+    chapter_data = {"chapter_" + key: value for key, value in event["chapter"].items()}
 
     combined = {**main_data, **chapter_data}
 
     combined_data.append(combined)
 
+# Prints the headers from the combined JSON data so that they can be copied below.
 # print(combined_data[0].keys())
 
 fieldnames = [
-    "id",
-    "title",
-    "description_short",
-    "picture",
-    "city",
-    "start_date",
-    "url",
-    "relative_url",
-    "video_url",
-    "event_type_title",
-    "event_type_logo",
-    "tags",
-    "allows_cohosting",
-    "result_type",
-    "chapter_chapter_location",
-    "chapter_city",
-    "chapter_country",
-    "chapter_country_name",
-    "chapter_description",
-    "chapter_id",
-    "chapter_hide_country_info",
-    "chapter_logo",
-    "chapter_state",
-    "chapter_timezone",
-    "chapter_title",
-    "chapter_relative_url",
-    "chapter_url",
+    'id',
+    'title',
+    'description_short',
+    'picture',
+    'city',
+    'start_date',
+    'url',
+    'relative_url',
+    'video_url',
+    'event_type_title',
+    'event_type_logo',
+    'tags',
+    'allows_cohosting',
+    'chapter_chapter_location',
+    'chapter_city',
+    'chapter_country',
+    'chapter_country_name',
+    'chapter_description',
+    'chapter_id',
+    'chapter_hide_country_info',
+    'chapter_logo',
+    'chapter_state',
+    'chapter_timezone',
+    'chapter_title',
+    'chapter_relative_url',
+    'chapter_url'
 ]
 
+# Writes events data to a CSV.
 with open("events.csv", "w", newline="", encoding="utf-8") as events_data:
     writer = csv.DictWriter(events_data, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows(combined_data)
 
+# Prints the events data CSV so that it can be checked.
+# with open('events.csv', 'r', newline='', encoding='utf-8') as events_data:
+#     print(events_data.read())
 
 conn = snowflake.connector.connect(
     user="SVC_DS31",
