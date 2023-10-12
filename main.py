@@ -80,7 +80,7 @@ conn.cursor().execute(
 
 conn.cursor().execute(
     """
-    CREATE OR REPLACE TABLE TD_ALL_EVENTS (id INTEGER, title TEXT, description_short TEXT, picture TEXT, city TEXT, start_date TEXT, url TEXT, relative_url TEXT, video_url FLOAT, event_type_title TEXT, event_type_logo TEXT, tags TEXT, allows_cohosting BOOLEAN, result_type TEXT, chapter_chapter_location TEXT, chapter_city TEXT, chapter_country TEXT, chapter_country_name TEXT, chapter_description TEXT, chapter_id INTEGER, chapter_hide_country_info BOOLEAN, chapter_logo TEXT, chapter_state TEXT, chapter_timezone TEXT, chapter_title TEXT, chapter_relative_url TEXT, chapter_url TEXT);"""
+    CREATE OR REPLACE TABLE TD_ALL_EVENTS (id INTEGER, title TEXT, description_short TEXT, picture TEXT, city TEXT, start_date TEXT, url TEXT, relative_url TEXT, video_url TEXT, event_type_title TEXT, event_type_logo TEXT, tags TEXT, allows_cohosting BOOLEAN, chapter_chapter_location TEXT, chapter_city TEXT, chapter_country TEXT, chapter_country_name TEXT, chapter_description TEXT, chapter_id INTEGER, chapter_hide_country_info BOOLEAN, chapter_logo TEXT, chapter_state TEXT, chapter_timezone TEXT, chapter_title TEXT, chapter_relative_url TEXT, chapter_url TEXT);"""
 )
 
 conn.cursor().execute(
