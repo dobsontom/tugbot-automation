@@ -107,95 +107,108 @@ conn.cursor().execute(
     """
     CREATE OR REPLACE TABLE td_attendable_events AS
     (
-       WITH main_data AS
-       (
-          SELECT
-             id,
-             title,
-             concat('"', RTRIM(description_short), '"') AS description_short,
-             event_type_title,
-             city,
-             chapter_country_name,
-             to_date(split_part(start_date, 'T', 1)) AS date_original,
-             to_char(to_date(split_part(start_date, 'T', 1))) AS date_formatted,
-             TIME(LEFT(split_part(start_date, 'T', 2), 8 ) ) AS local_time,
-             RIGHT(start_date, 6) AS time_difference,
-             url,
-             REPLACE( TRANSLATE(tags, '''[]', ''), ', ', ',' ) AS tags,
-             REPLACE( REPLACE( REPLACE(picture, '{''url'': ''', ''), '''}', '' ), '{}', '' ) AS picture,
-             CONVERT_TIMEZONE('GMT', current_timestamp()) as row_created_timestamp
-          FROM
-             til_portfolio_projects.td_tug_schema.td_all_events
-       ),
-       cities AS
-       (
-          SELECT
-             *
-          FROM
-             til_portfolio_projects.td_tug_schema.cities
-       )
-       SELECT
-          *
-       FROM
-          (
-             SELECT
-                *,
-                CASE
-                   WHEN
-                      event_type_title IN
-                      (
-                         'Virtual Event',
-                         'Virtual',
-                         'Hybrid Event',
-                         'Hybrid'
-                      )
-                      AND gmt_time NOT BETWEEN TIME('02:00') AND TIME('08:00')
-                   THEN
-                      TRUE
-                   ELSE
-                      CASE
-                         WHEN
-                            chapter_country_name IN
-                            (
-                               SELECT
-                                  country
-                               FROM
-                                  cities
-                            )
-                            AND time_difference IN
-                            (
-                               '+00:00',
-                               '+01:00',
-                               '+02:00',
-                               '-04:00'
-                            )
-                         THEN
-                            TRUE
-                         ELSE
-                            FALSE
-                      END
-                END
-                AS event_attendable_ind
-             FROM
-                (
-                   SELECT
-                      *,
-                      LEFT(
-                        CASE
-                           WHEN
-                              LEFT(time_difference, 1) = '+'
-                           THEN
-                              DATEADD( HOUR, - SUBSTR(time_difference, 3, 1), local_time )
-                           ELSE
-                              DATEADD( HOUR, SUBSTR(time_difference, 3, 1), local_time )
-                        END, 5)
-                      AS gmt_time
-                   FROM
-                      main_data
-                )
-          )
-       WHERE
-          event_attendable_ind = TRUE
+       WITH main_data AS 
+        (
+           SELECT
+              id,
+              title,
+              concat('"', RTRIM(description_short), '"') AS description_short,
+              event_type_title,
+              city,
+              chapter_country_name,
+              to_date(split_part(start_date, 'T', 1)) AS date_original,
+              to_char(to_date(split_part(start_date, 'T', 1))) AS date_formatted,
+              TIME(LEFT(split_part(start_date, 'T', 2), 8 ) ) AS local_time,
+              // This accounts for some time differences being in Zulu time. 
+              CASE
+                 WHEN
+                    CONTAINS(start_date, 'Z') 
+                 THEN
+                    // This converts Zulu times to times relative to BST or GMT depending on the month of the event. 
+                    CASE
+                       WHEN
+                          MONTH(to_date(split_part(start_date, 'T', 1))) BETWEEN 4 AND 10 
+                       THEN
+                          '+01:00' 
+                       ELSE
+                          '+00:00' 
+                    END
+                    ELSE
+                       RIGHT(start_date, 6) 
+              END
+              AS time_difference,
+              url,
+              REPLACE( TRANSLATE(tags, '''[]', ''), ', ', ',' ) AS tags,
+              REPLACE( REPLACE( REPLACE(picture, '{''url'': ''', ''), '''}', '' ), '{}', '' ) AS picture,
+              CONVERT_TIMEZONE('GMT', current_timestamp()) as row_created_timestamp 
+           FROM
+              til_portfolio_projects.td_tug_schema.td_all_events 
+        )
+        , cities AS 
+        (
+           SELECT
+              * 
+           FROM
+              til_portfolio_projects.td_tug_schema.cities 
+        )
+        
+        SELECT
+           * 
+        FROM
+           (
+              SELECT
+                 *,
+                 CASE
+                    WHEN
+                       event_type_title IN 
+                       (
+                          'Virtual Event','Virtual','Hybrid Event','Hybrid' 
+                       )
+                       AND gmt_time NOT BETWEEN TIME('02:00') AND TIME('08:00') 
+                    THEN
+                       TRUE 
+                    ELSE
+                       CASE
+                          WHEN
+                             chapter_country_name IN 
+                             (
+                                SELECT
+                                   country 
+                                FROM
+                                   cities 
+                             )
+                             AND time_difference IN 
+                             (
+                                '+00:00','+01:00','+02:00','-04:00' 
+                             )
+                          THEN
+                             TRUE 
+                          ELSE
+                             FALSE 
+                       END
+                 END
+                 AS event_attendable_ind 
+              FROM
+                 (
+                    SELECT
+                       *,
+                       LEFT( 
+                       CASE
+                          WHEN
+                             LEFT(time_difference, 1) = '+' 
+                          THEN
+                             DATEADD( HOUR, - SUBSTR(time_difference, 3, 1), local_time ) 
+                          ELSE
+                             DATEADD( HOUR, SUBSTR(time_difference, 3, 1), local_time ) 
+                       END, 5) AS gmt_time 
+                    FROM
+                       main_data 
+                 )
+           )
+        WHERE
+           event_attendable_ind = TRUE
+        AND 
+           date_original >= DATEADD(DAY, -1, CURRENT_DATE())
     )
     ORDER BY
        date_formatted, gmt_time;
