@@ -143,8 +143,8 @@ conn.cursor().execute(
               CONVERT_TIMEZONE('GMT', current_timestamp()) as row_created_timestamp 
            FROM
               til_portfolio_projects.td_tug_schema.td_all_events 
-        )
-        , cities AS 
+        ), 
+        cities AS 
         (
            SELECT
               * 
@@ -212,6 +212,19 @@ conn.cursor().execute(
     )
     ORDER BY
        date_formatted, gmt_time;
+"""
+)
+
+conn.cursor().execute(
+    """
+    CREATE OR REPLACE TABLE td_distant_attendable_events AS (
+      SELECT
+         *
+      FROM
+         td_attendable_events
+      WHERE
+          DATEDIFF(DAY, CURRENT_DATE, date_original) > 14
+    );
 """
 )
 
