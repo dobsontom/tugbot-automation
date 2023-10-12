@@ -3,7 +3,7 @@ import csv
 import snowflake.connector
 import os
 
-url = "https://usergroups.tableau.com/api/search/?result_types=upcoming_event&&country_code=Earth"
+url = "https://usergroups.tableau.com/api/event/?fields=id,title,description_short,picture,chapter,city,start_date,url,relative_url,video_url,event_type_title,event_type_logo,tags,allows_cohosting&status=Published"
 
 response = requests.get(url)
 response.raise_for_status()
@@ -196,7 +196,6 @@ conn.cursor().execute(
        date_formatted, gmt_time;
 """
 )
-
 
 conn.cursor().execute(
     """
