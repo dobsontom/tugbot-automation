@@ -106,8 +106,8 @@ conn.cursor().execute(
                        ELSE
                           '+00:00' 
                     END
-                    ELSE
-                       RIGHT(start_date, 6) 
+                  ELSE
+                     RIGHT(start_date, 6) 
               END
               AS time_difference,
               url,
