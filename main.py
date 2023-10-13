@@ -21,37 +21,10 @@ for event in json_results:
 
     combined_data.append(combined)
 
-# Prints the headers from the combined JSON data so that they can be copied below.
+# Prints the headers from the combined JSON data.
 # print(combined_data[0].keys())
 
-fieldnames = [
-    'id',
-    'title',
-    'description_short',
-    'picture',
-    'city',
-    'start_date',
-    'url',
-    'relative_url',
-    'video_url',
-    'event_type_title',
-    'event_type_logo',
-    'tags',
-    'allows_cohosting',
-    'chapter_chapter_location',
-    'chapter_city',
-    'chapter_country',
-    'chapter_country_name',
-    'chapter_description',
-    'chapter_id',
-    'chapter_hide_country_info',
-    'chapter_logo',
-    'chapter_state',
-    'chapter_timezone',
-    'chapter_title',
-    'chapter_relative_url',
-    'chapter_url'
-]
+fieldnames = combined_data[0].keys()
 
 # Writes events data to a CSV.
 with open("events.csv", "w", newline="", encoding="utf-8") as events_data:
