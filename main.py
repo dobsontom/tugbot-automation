@@ -32,7 +32,7 @@ with open("events.csv", "w", newline="", encoding="utf-8") as events_data:
     writer.writeheader()
     writer.writerows(combined_data)
 
-# Prints the events data CSV so that it can be checked.
+# Prints the events data CSV for review.
 # with open('events.csv', 'r', newline='', encoding='utf-8') as events_data:
 #     print(events_data.read())
 
@@ -78,7 +78,7 @@ conn.cursor().execute(
 
 conn.cursor().execute(
     """
-    CREATE OR REPLACE TABLE td_attendable_events AS
+    CREATE OR REPLACE TABLE td_accessible_events AS
     (
        WITH main_data AS 
         (
@@ -160,7 +160,7 @@ conn.cursor().execute(
                              FALSE 
                        END
                  END
-                 AS event_attendable_ind 
+                 AS event_accessible_ind 
               FROM
                  (
                     SELECT
@@ -179,7 +179,7 @@ conn.cursor().execute(
                  )
            )
         WHERE
-           event_attendable_ind = TRUE
+           event_accessible_ind = TRUE
         AND 
            date_original >= DATEADD(DAY, -1, CURRENT_DATE())
     )
@@ -190,11 +190,11 @@ conn.cursor().execute(
 
 conn.cursor().execute(
     """
-    CREATE OR REPLACE TABLE td_distant_attendable_events AS (
+    CREATE OR REPLACE TABLE td_distant_accessible_events AS (
       SELECT
          *
       FROM
-         td_attendable_events
+         td_accessible_events
       WHERE
           DATEDIFF(DAY, CURRENT_DATE, date_original) > 14
     );
@@ -203,12 +203,12 @@ conn.cursor().execute(
 
 conn.cursor().execute(
     """
-    CREATE OR REPLACE TABLE til_portfolio_projects.td_tug_schema.td_upcoming_attendable_events AS (
+    CREATE OR REPLACE TABLE til_portfolio_projects.td_tug_schema.td_upcoming_accessible_events AS (
        SELECT
           *,
           DATEDIFF(DAY, CURRENT_DATE, date_original) AS days_until_event
        FROM
-          til_portfolio_projects.td_tug_schema.td_attendable_events
+          til_portfolio_projects.td_tug_schema.td_accessible_events
        WHERE
           DATEDIFF(DAY, CURRENT_DATE, date_original) BETWEEN 0 AND 14
     );
