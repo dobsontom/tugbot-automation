@@ -15,7 +15,7 @@ The TUGBot project automates the detection and posting of relevant Tableau User 
 3. **Automation Schedule**
 * A GitHub action runs the Python script every three hours at 20 minutes past that hour, between 08:00 and 22:59, Monday through Friday, ensuring that TUG alerts are during TIL's working hours.
 4. **Integration with Convo**
-* [Zapier](https://zapier.com/ "Zapier Website"), an external web app, posts to Convo when a new row is detected:
+* [Zapier](https://zapier.com/ "Zapier Website"), an external web app, creates a Convo post for each new row that is detected:
   * A new row in *td_upcoming_accessible_events* triggers a TUG event reminder.
   * A new row in *td_distant_accessible_events* triggers a new TUG alert.
 ## Acknowledgements
