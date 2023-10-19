@@ -21,7 +21,7 @@ The TUGBot project automates the detection and posting of relevant Tableau User 
 
 4. **Integration with Convo**
 * [Zapier](https://zapier.com/ "Zapier Website"), an external web app, generates a Convo post with event details for each new row that is detected:
-  * A new row in *td_upcoming_accessible_events* triggers a TUG event reminder.
+  * A new row in *td_upcoming_accessible_events* triggers a TUG reminder.
   * A new row in *td_distant_accessible_events* triggers a new TUG alert.
  
 ## Acknowledgements
