@@ -1,7 +1,7 @@
-# Automating TUG Event Posting with TUGBot
+# Automating TUG Event Posting with TUGbot
 
 ## Project Description
-The TUGBot project automates the detection and posting of relevant Tableau User Group (TUG) events to The Information Lab (TIL)'s internal [Convo](https://www.convo.com/ "Convo Platform Website") network, streamlining the delivery of event notifications to employees.
+The TUGbot project automates the detection and posting of relevant Tableau User Group (TUG) events to The Information Lab (TIL)'s internal [Convo](https://www.convo.com/ "Convo Platform Website") network, streamlining the delivery of event notifications to employees.
 
 ## Workflow
 1. **Data Collection and Processing**
@@ -25,4 +25,4 @@ The TUGBot project automates the detection and posting of relevant Tableau User 
   * A new row in `td_distant_accessible_events` triggers a new TUG alert.
  
 ## Acknowledgements
-* Thanks to [The Information Lab](https://www.theinformationlab.co.uk/ "The Information Lab Website") for supporting the TUGBot project.
+* Thanks to [The Information Lab](https://www.theinformationlab.co.uk/ "The Information Lab Website") for supporting the TUGbot project.
